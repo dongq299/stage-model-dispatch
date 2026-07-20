@@ -25,12 +25,17 @@ Effort values assume a `low < medium < high < max` ladder — map them to whatev
 3. **Review stages**: run the table model's review **plus a cross-review from a different model family** (another CLI/agent) if you have one. When they disagree, **verify the dissenting opinion first** — only a confirmed high-severity finding blocks progress.
 4. **Research stage**: run two agents **in parallel on the same goal** (different families if possible). Not a division of labor — the point is different blind spots on identical scope.
 5. **Research merge**: a T1 agent merges, dedupes, and flags contradictions. Pass the merged file to the design stage **verbatim** — no lossy re-summarizing in between.
+6. Before dispatching, map stage dependencies: independent work runs in parallel (like the research pair); dependent stages run serially. Don't serialize what doesn't depend.
 
 ## Role 3-pack (required in every delegation prompt)
 
 1. **Role, one line** — domain + stage duty ("senior backend engineer implementing the payments module")
 2. **2–3 concrete acceptance lenses** for this stage's output ("refutation-first, boundary values, rollback path") — no bare abstractions like "quality"
 3. **One line on what this stage is NOT** ("the reviewer does not edit code")
+
+## Stage handoff
+
+Every stage saves its output to a file; the next stage receives the **path**, not a paraphrase. Add context if needed, but never replace the artifact with your own summary — lossy re-summarizing between stages is where delegated work quietly degrades.
 
 ## Big-flow defaults
 
@@ -70,6 +75,10 @@ Direct edits up to ~2 code files per turn stay on the session model — no table
 
 If a tier has its own quota, some harnesses **silently** fall back to the session model when it runs out — no error, no signal. Detect it: ask every T1 delegation to end with a final line `[MODEL:<its model id>]`. Exactly one tag, on the last line, matching the requested tier — anything else means substituted. Strip the tag before passing output onward. On substitution: pin an explicit fallback model (one tier down) for the remaining T1 stages, and say so in your report. Never present substituted output as T1.
 
+## Verification evidence
+
+Test and verify stages may not report "passed" as a bare claim — the report must include an excerpt of the real command output (test summary lines, exit status). No excerpt = unverified; label it as such.
+
 ## Failure rule
 
 Same stage fails the same acceptance check twice → stop, report, propose a different approach. No third identical retry.
@@ -85,3 +94,4 @@ Only when the user explicitly asks to save tokens: every cell drops one model ti
 - Applying the table to the interactive session model — it governs delegation only
 - A role that is just a title ("you are an expert") — all three pack elements are required
 - Leaving the T1 model pinned after its quota is gone — the harness substitutes silently; pin the fallback explicitly and report it
+- Reporting "tests passed" with no output excerpt — no evidence, no claim
