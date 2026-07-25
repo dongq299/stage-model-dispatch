@@ -24,7 +24,7 @@ Effort values assume a `low < medium < high < max` ladder — map them to whatev
 2. Delegate each stage with the model/effort from the table. Every delegation prompt must include the **role 3-pack** (below).
 3. **Review stages**: run the table model's review **plus a cross-review from a different model family** (another CLI/agent) if you have one. When they disagree, **verify the dissenting opinion first** — only a confirmed high-severity finding blocks progress.
 4. **Research stage**: run two agents **in parallel on the same goal** (different families if possible). Not a division of labor — the point is different blind spots on identical scope.
-5. **Research merge**: a T1 agent merges, dedupes, and flags contradictions. Pass the merged file to the design stage **verbatim** — no lossy re-summarizing in between.
+5. **Research merge**: a T2 agent merges, dedupes, and flags contradictions. Pass the merged file to the design stage **verbatim** — no lossy re-summarizing in between.
 6. Before dispatching, map stage dependencies: independent work runs in parallel (like the research pair); dependent stages run serially. Don't serialize what doesn't depend.
 
 ## Role 3-pack (required in every delegation prompt)
@@ -42,11 +42,11 @@ Every stage saves its output to a file; the next stage receives the **path**, no
 | Stage | Tier | Effort |
 |---|---|---|
 | 1. Research (2× parallel, same goal) | T3 + second family | medium |
-| 1b. Research merge | T1 | high |
+| 1b. Research merge | T2 | high |
 | 2. Design | T1 | high |
 | 3. Design review (+cross-review) | T2 | high |
 | 4. Implementation | T2 | max |
-| 5. Code review (+cross-review) | T1 | high |
+| 5. Code review (+cross-review) | T2 | high |
 | 6. Tests / smoke | T4 | medium |
 | 7. Deploy / retrospective | T4 | medium |
 | 8. Chores, simple lookups | T4 | low |
@@ -57,9 +57,23 @@ Every stage saves its output to a file; the next stage receives the **path**, no
 |---|---|---|
 | 1. Quick check + short research | T3 (+second family) | medium |
 | 2. Code | T2 | max |
-| 3. Review (+cross-review) | T1 | high |
+| 3. Review (+cross-review) | T2 | high |
 | 4. Run tests | T4 | medium |
 | 5. Deploy | T4 | low |
+
+## When to reach for T1
+
+Most stages run on T2. Reserve T1 — your most capable, usually rate-limited tier — for calls that are expensive to unwind:
+
+- **Design and architecture** (stage 2 above)
+- **A new project's problem-definition phase**, before the shape of the work settles
+- **Your final design gate**, if you run one
+- **After the same stage fails twice**, when the fix is a different approach rather than another attempt — and for long-horizon autonomous runs
+
+Two places to keep off T1 even though they look like deep work:
+
+- **Security tooling, or anything a frontier model's safety classifiers will flag.** The stronger model may refuse mid-task and stall the run; a tier down finishes it.
+- **High-volume generation loops.** T1 per iteration burns a separate, smaller quota in days.
 
 ## Flow classification
 
@@ -69,7 +83,7 @@ Every stage saves its output to a file; the next stage receives the **path**, no
 
 ## Inline boundary
 
-Direct edits up to ~2 code files per turn stay on the session model — no table. From the 3rd file, stop and delegate (small-flow table). Any direct **change** still gets a T1 review (+cross-review) before you call it done — never self-review only. Read-only work and text reports need no review.
+Direct edits up to ~2 code files per turn stay on the session model — no table. From the 3rd file, stop and delegate (small-flow table). Any direct **change** still gets a T2 review (+cross-review) before you call it done — never self-review only. Read-only work and text reports need no review.
 
 ## Silent-substitution canary
 

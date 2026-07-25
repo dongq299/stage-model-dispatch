@@ -4,7 +4,7 @@ A Claude Code skill that decides **which model — and how much thinking — to 
 
 ## What you get
 
-- **Your quota lasts longer.** Running tests, file lookups, and chores stop eating your frontier model. The deep models are saved for design and review — the stages where they actually matter.
+- **Your quota lasts longer.** Running tests, file lookups, and chores stop eating your frontier model. Most of the work — implementation, review, research merge — runs a tier down, and the frontier model is saved for design and the calls that are expensive to unwind.
 - **One decision instead of fifty.** Classify the task once (big-flow or small-flow); a table decides every stage's model and effort from there. No per-delegation agonizing.
 - **Built-in second opinions.** Reviews are never a model grading its own homework: a second model family cross-reviews, and when the two disagree, the dissenting view gets checked first.
 - **No more secret stand-ins.** When a premium model's quota runs out, some harnesses silently hand your task to a weaker model — no error, no warning, and you keep believing the expensive model did the work. This skill makes every delegated agent **sign its reply** with a one-line model receipt (`[MODEL:<id>]`). Wrong signature → a stand-in did the work, and the skill pins an explicit fallback instead of pretending.
