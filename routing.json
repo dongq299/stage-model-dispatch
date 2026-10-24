@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "cache_ttl_seconds": 86400,
+  "codex_roles": {
+    "research": {"signals": ["fast", "affordable", "research"], "effort": "high"},
+    "design": {"signals": ["frontier", "demanding", "complex"], "effort": "deep"},
+    "design_review": {"signals": ["frontier", "demanding", "complex"], "effort": "deep"},
+    "implementation": {"signals": ["workhorse", "coding", "code"], "effort": "high"},
+    "verification": {"signals": ["fast", "affordable", "everyday"], "effort": "medium"}
+  }
+}

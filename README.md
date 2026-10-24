@@ -28,6 +28,7 @@ Or copy `SKILL.md` into `~/.claude/skills/stage-model-dispatch/`. Claude Code pi
 1. Edit the **Tier map** in `SKILL.md` to your model stack (T1–T4).
 2. Rename the effort values to your harness's ladder.
 3. Have a second model family (another CLI/agent)? Wire it into the research/review stages. If not, delete those mentions — everything else stands alone.
+4. Using the Codex CLI? `scripts/resolve_models.py` can pick Codex models per stage automatically and warns when a newly listed model goes unused (see "Optional: auto-fill the Codex tiers" in `SKILL.md`). Skip it otherwise — the skill works without it.
 
 ## License
 

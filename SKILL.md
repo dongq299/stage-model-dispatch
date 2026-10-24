@@ -18,6 +18,22 @@ Assign a model tier and a reasoning-effort level to **each stage** of delegated 
 
 Effort values assume a `low < medium < high < max` ladder — map them to whatever your harness calls its levels.
 
+### Optional: auto-fill the Codex tiers
+
+If you delegate to the Codex CLI, `scripts/resolve_models.py` can pick the Codex model and effort per stage for you, so the table never goes stale when a new model ships. It only calls the local `codex app-server` for `model/list` (no inference, no credentials read) and caches the list for 24h.
+
+```bash
+python3 scripts/resolve_models.py plan            # model + effort per role
+python3 scripts/resolve_models.py plan --refresh  # re-list now
+python3 scripts/resolve_models.py plan --role implementation --model <id> --effort <value>  # explicit pin
+```
+
+- Roles (`research`, `design`, `design_review`, `implementation`, `verification`) match the provider's model **descriptions** against the signal words in `routing.json`. Version numbers in model names are never sorted. Edit the signals if your provider's wording changes.
+- `deep` means the deepest ordinary effort; `ultra` is never chosen automatically.
+- A full `plan` warns when a model listed in the last 7 days is not selected for any role — usually a sign the signal words need updating.
+- On `model unavailable`, run `record-failure --role <role> --model <id>` (excluded for 1h) and plan again. Record `record-success` only from the model id in the run's own metadata.
+- The selection is a plan, not proof: confirm the model that actually ran from runtime metadata.
+
 ## Procedure
 
 1. Skim the task, then open your reply with a one-line verdict: `[big-flow | small-flow — reason]`. The user can override it.
